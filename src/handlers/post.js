@@ -10,7 +10,7 @@ export async function getPostById(req, res) {
     const { id } = req.params
 
     if (!id) {
-        return res.status(400).json({ error: 'ID is required' })
+        return res.status(400).json({ error: 'ID is required!' })
     }
 
     const post = await postService.getPostById(id)
