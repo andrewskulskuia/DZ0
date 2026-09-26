@@ -14,13 +14,13 @@ export async function getPostById(req: Request, res: Response) {
     const id = req.params.id as string;
 
     if (!id) {
-        return res.status(400).json({ error: 'ID is required' })
+        return res.status(400).json({ error: 'ID is required!' })
     }
 
     const post = await postService.getPostById(id)
 
     if (!post) {
-        return res.status(404).json({ error: 'Post not found' })
+        return res.status(404).json({ error: 'Post not found!' })
     }
 
     res.json(post)
@@ -30,7 +30,7 @@ export async function createPost(req: Request<{}, {}, CreatePostDTO>, res: Respo
     const { title, content, author, category } = req.body
 
     if (!title || !content || !author || !category) {
-        return res.status(422).json({ error: 'All fields are required' })
+        return res.status(422).json({ error: 'All fields are required!' })
     }
 
     const newPost = await postService.createPost({ title, content, author, category })
