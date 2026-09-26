@@ -1,4 +1,14 @@
-const posts = [
+export interface Post{
+    id: string
+    title: string
+    content: string
+    author: string
+    category: string
+}
+
+export type Postdata = Omit<Post, "id">
+
+const posts: Post[] = [
     {
         id: '1',
         title: 'python',
@@ -23,7 +33,7 @@ const posts = [
 ]
 
 class PostRepository {
-    async getAll(category, take) {
+    async getAll(category?: Post["category"], take?: number) {
         let result = posts
 
         if (category) {
@@ -37,11 +47,11 @@ class PostRepository {
         return result;
     }
 
-    async getById(id) {
+    async getById(id: Post["id"]) {
         return posts.find(post => post.id === id) || null
     }
 
-    async addPost(postData) {
+    async addPost(postData: Postdata) {
         return new Promise((resolve) => {
             const newId = (posts.length + 1).toString()
 

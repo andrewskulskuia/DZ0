@@ -1,13 +1,17 @@
 import * as postService from '../services/post.js'
+import type { Request, Response } from 'express'
+import type { CreatePostDTO, PostQueryDTO } from '../dto/dto.js'
 
-export async function getPosts(req, res) {
-    const { category, take } = req.query
+
+export async function getPosts(req: Request<{}, {}, {}, PostQueryDTO>, res: Response) {
+    const take = req.query.take ? Number(req.query.take) : 10
+    const category = req.query.category as string
     const posts = await postService.getAllPosts(category, take)
     res.json(posts);
 }
 
-export async function getPostById(req, res) {
-    const { id } = req.params
+export async function getPostById(req: Request, res: Response) {
+    const id = req.params.id as string;
 
     if (!id) {
         return res.status(400).json({ error: 'ID is required!' })
@@ -22,7 +26,7 @@ export async function getPostById(req, res) {
     res.json(post)
 }
 
-export async function createPost(req, res) {
+export async function createPost(req: Request<{}, {}, CreatePostDTO>, res: Response) {
     const { title, content, author, category } = req.body
 
     if (!title || !content || !author || !category) {
