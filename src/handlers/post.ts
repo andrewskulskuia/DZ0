@@ -30,7 +30,7 @@ export function createPostHandler(postService: any) {
             const { title, content, author, category } = req.body
 
             if (!title || !content || !author || !category) {
-                return res.status(422).json({ error: 'All fields are required!' })
+                return res.status(422).json({ error: 'All fields are required!!!' })
             }
 
             const newPost = await postService.createPost({ title, content, author, category })
