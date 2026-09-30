@@ -33,7 +33,7 @@ const posts: Post[] = [
 ]
 
 class PostRepository {
-    async getAll(category?: Post["category"], take?: number) {
+    async getPosts(category?: Post["category"], take?: number) {
         let result = posts
 
         if (category) {
@@ -51,11 +51,11 @@ class PostRepository {
         return posts.find(post => post.id === id) || null
     }
 
-    async addPost(postData: Postdata) {
-        return new Promise((resolve) => {
+    async addPost(postData: Postdata): Promise<Post> {
+        return new Promise<Post>((resolve) => {
             const newId = (posts.length + 1).toString()
 
-            const newPost = {
+            const newPost: Post = {
                 id: newId,
                 ...postData
             }
