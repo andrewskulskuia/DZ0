@@ -30,7 +30,7 @@ export function createPostHandler(postService: any): PostHandlerContract {
         async createPost(req, res) {
             const { title, content, author, category } = req.body
 
-            if (!title || !content || !author || !category) {
+            if (!title || !content  || !category) {
                 return res.status(422).json({ error: 'All fields are required!' })
             }
 

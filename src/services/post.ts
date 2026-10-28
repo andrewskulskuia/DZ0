@@ -11,8 +11,13 @@ export function createPostService(postRepository: PostRepository) {
             return await postRepository.getById(id)
         },
 
-        async createPost(postData: Omit<Post, "id">) {
-            return await postRepository.addPost(postData)
+        async createPost(postData: any) {
+            const postWithUser = {
+                ...postData,
+                userId: postData.userId || "fa66657f-4ee9-469e-b3de-9b4d86dba86a"
+            }
+
+            return await postRepository.addPost(postWithUser)
         }
     }
 }
