@@ -1,69 +1,49 @@
-export interface Post{
-    id: string
-    title: string
-    content: string
-    author: string
-    category: string
-}
+import type { Post } from "../domein/post/entity.js"
+import type { PostRepository } from "../domein/post/repository.js"
 
-export type Postdata = Omit<Post, "id">
+type Database = typeof import("../prisma/db.js").db
 
-const posts: Post[] = [
-    {
-        id: '1',
-        title: 'python',
-        content: 'python.',
-        author: 'python',
-        category: 'python'
-    },
-    {
-        id: '2',
-        title: 'GO lang',
-        content: 'GO lang',
-        author: 'GO lang',
-        category: 'GO lang'
-    },
-    {
-        id: '3',
-        title: 'JavaScript',
-        content: 'JavaScript',
-        author: 'JavaScript',
-        category: 'JavaScript'
+export function createPostRepository(db: Database): PostRepository {
+    const client = db as any
+
+    async function getPostModel() {
+        const model = client.orm?.Post 
+                   || client.orm?.post 
+                   || client.Post 
+                   || client.post 
+                   || client.orm?.public?.Post 
+                   || client.orm?.public?.post
+
+        if (!model) {
+            throw new Error("Post Model not found")
+        }
+        return model
     }
-]
 
-class PostRepository {
-    async getPosts(category?: Post["category"], take?: number) {
-        let result = posts
+    async function getPosts(category?: string, take?: number): Promise<Post[]> {
+        const postModel = await getPostModel()
+        let posts: Post[] = await postModel.all()
 
         if (category) {
-            result = result.filter(post => post.category === category)
+            posts = posts.filter(p => p.category === category)
+        }
+        if (take) {
+            posts = posts.slice(0, Number(take))
         }
 
-        if (take !== undefined && take !== null) {
-            result = result.slice(0, Number(take))
-        }
-
-        return result;
+        return posts
     }
 
-    async getById(id: Post["id"]) {
-        return posts.find(post => post.id === id) || null
+    async function getById(id: string): Promise<Post | null> {
+        const postModel = await getPostModel()
+        const posts: Post[] = await postModel.all()
+        return posts.find(p => p.id === id) || null
     }
 
-    async addPost(postData: Postdata): Promise<Post> {
-        return new Promise<Post>((resolve) => {
-            const newId = (posts.length + 1).toString()
-
-            const newPost: Post = {
-                id: newId,
-                ...postData
-            }
-
-            posts.push(newPost)
-            resolve(newPost)
-        });
+    async function addPost(postData: Omit<Post, "id">): Promise<Post> {
+        const postModel = await getPostModel()
+        return postModel.create(postData)
     }
+
+    return { getPosts, getById, addPost }
 }
-
-export default new PostRepository()
