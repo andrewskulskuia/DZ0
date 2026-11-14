@@ -1,31 +1,20 @@
-import './App.css'
-import { useGetPostsQuery } from './api/baseApi'
-import { PostsProps } from './component/post'
-
+// import PostCardList from "./post/PostCardList";
+import "./App.css";
+import { LoginForm } from "./component/user/LoginForm";
+import { RegisterForm } from "./component/user/RegistrationForm";
 function App() {
-  const { data: posts, isLoading, isError } = useGetPostsQuery({})
-
-  if (isLoading) {
-    return <div className="loading">loading</div>
-  }
-
-  if (isError) {
-    return <div className="error">error</div>
-  }
-
   return (
     <div className="app-container">
-      <div className="posts-list">
-        {posts && posts.length === 0 ? (
-          <p>no posts</p>
-        ) : (
-          posts?.map((post: any) => (
-            <PostsProps key={post.id} post={post} />
-          ))
-        )}
-      </div>
+      <header className="board-header">
+        <h1>/tech/ - Technology &amp; Programming</h1>
+      </header>
+      <main>
+        <LoginForm />
+        <RegisterForm />
+        {/* <PostCardList /> */}
+      </main>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

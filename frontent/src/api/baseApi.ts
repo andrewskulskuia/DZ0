@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import type { LoginForm, RegistrationForm, User } from '../type/user';
 
 export const baseApi = createApi({
   reducerPath: 'baseApi',
@@ -7,7 +8,21 @@ export const baseApi = createApi({
     getPosts: builder.query({
       query: () => 'posts',
     }),
+    register: builder.mutation<User, RegistrationForm>({
+            query: (data) => ({
+                url: "/auth/sign-up",
+                method: "POST",
+                body: data
+            })
+        }),
+    login: builder.mutation<User, LoginForm>({
+        query: (data) => ({
+            url: "/auth/sign-in",
+            method: "POST",
+            body: data
+        })
+    }),
   }),
 });
 
-export const { useGetPostsQuery } = baseApi;
+export const { useGetPostsQuery, useLoginMutation, useRegisterMutation } = baseApi;
