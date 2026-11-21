@@ -65,3 +65,18 @@
   background-color: #a5b4fc;
   cursor: not-allowed;
 }
+.error {
+  color: #dc2626;
+  font-size: 0.85rem;
+}
+div.error {
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  border: 1px solid #fca5a5;
+  border-radius: 4px;
+  background-color: #fef2f2;
+}
+
+.board-header span {
+  font-weight: 600;
+}
